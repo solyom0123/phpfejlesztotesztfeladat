@@ -25,7 +25,6 @@ class MainAdminController extends AbstractController
         $menus = array();
         for ($i = 0; $i < sizeof($user->getRoles()); $i++) {
             $unionMenus = array();
-            var_dump($user->getRoles()[$i]);
             if ($user->getRoles()[$i] == "ROLE_ADMIN") {
                 array_push($unionMenus, "app_editor","app_user", "app_admin");
             } else if ($user->getRoles()[$i] == "ROLE_USER") {
@@ -33,11 +32,8 @@ class MainAdminController extends AbstractController
             } else if ($user->getRoles()[$i] == "ROLE_EDITOR") {
                 array_push($unionMenus,"app_editor");
             }
-            var_dump($unionMenus);
-            var_dump(array_diff($unionMenus,$menus));
             $menus =array_merge($menus,array_diff($unionMenus,$menus));
-            var_dump($menus);
-        }
+           }
         $link = array();
         for ($i = 0; $i < sizeof($menus); $i++) {
             if ($menus[$i] == "app_editor") {
