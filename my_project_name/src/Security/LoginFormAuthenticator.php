@@ -134,10 +134,12 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         if ($request->hasSession()) {
             $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
         }
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $request->request->get('username')]);
-        $user->setWrongLogInTriesNumber($user->getWrongLogInTriesNumber()+1);
-        $this->entityManager->flush();
 
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $request->request->get('username')]);
+        if($user) {
+            $user->setWrongLogInTriesNumber($user->getWrongLogInTriesNumber() + 1);
+            $this->entityManager->flush();
+        }
         if($user&&$user->getWrongLogInTriesNumber()>=3) {
             $user->setCaptchaQuestion("".random_int(1000000,9999999));
             $this->entityManager->flush();
